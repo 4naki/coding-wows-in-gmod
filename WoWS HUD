@@ -13,7 +13,7 @@ if(first()){
     TextPositionY=300
     
     MaxThrottle=3.8*4
-    MinThrottle=-MaxThrottle/4
+    MinThrottle=-MaxThrottle/2
     
     MoveSpeed=0.05
     
@@ -127,9 +127,9 @@ if(MoveDistance>Level){
 if(MoveDistance<Level){
     MoveDistance=MoveDistance+MoveSpeed
 }
-Add=-Move*6
-EGP:egpText(9,"<",vec2(TextPositionX+45+ScrW,TextPositionY+(-0.75)+(TextDistance*6)+(Add)+ScrH))
-EGP:egpText(10,""+abs(Move)+" kts",vec2(TextPositionX+55+ScrW,TextPositionY+(TextDistance*6)+(Add)+ScrH))
+Add=ThrottleValue-Move
+EGP:egpText(9,"<",vec2(TextPositionX+45+ScrW,TextPositionY+(-0.75)+(TextDistance*MoveDistance)+(Add)+ScrH))
+EGP:egpText(10,""+abs(Move)+" kts",vec2(TextPositionX+55+ScrW,TextPositionY+(TextDistance*MoveDistance)+(Add)+ScrH))
 
 if(clk("load")){
 EGP:egpText(1,"   W",vec2(TextPositionX+ScrW,TextPositionY+(TextDistance*1)+ScrH))
