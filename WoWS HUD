@@ -1,0 +1,151 @@
+@name WoWS HUD
+@inputs W S EGP:wirelink Seat:entity Move
+@outputs MaxThrottle MinThrottle ThrottleValue Add MoveAmount
+@persist Throttle Text:string ScrW ScrH Level TextDistance TextPositionX TextPositionY MaxThrottle MinThrottle ThrottleValue MoveDistance MoveSpeed MoveAmount
+interval(100)
+if(first()){
+    EGP:egpClear()
+    ScrW=egpScrW(owner())/2
+    ScrH=egpScrH(owner())/2
+    
+    TextDistance=23
+    TextPositionX=-600
+    TextPositionY=300
+    
+    MaxThrottle=3.8*4
+    MinThrottle=-MaxThrottle/2
+    
+    MoveSpeed=0.05
+    
+    Level=6
+    MoveDistance=6
+    timer("throttle",100)
+    timer("load",100)
+}
+
+if(changed(W)&W){
+    timer("up",1000/3.5)
+}
+if(changed(S)&S){
+    timer("down",1000/3.5)
+}
+if(clk("up")){
+    if(Throttle<4){
+        Throttle=Throttle+1
+        Seat:soundPlay("clk",0,"common/wpn_moveselect.wav")
+    }
+    if(W){
+        timer("up",1000/3.5)
+    }
+}
+if(clk("down")){
+    if(Throttle>-1){
+        Throttle=Throttle-1
+        Seat:soundPlay("clk",0,"common/wpn_moveselect.wav")
+    }
+    if(S){
+        timer("down",1000/3.5)
+    }
+}
+
+if(changed(Throttle)){
+    timer("throttle",100)
+}
+if(clk("throttle")){
+    if(Throttle==4){
+        Level=2
+        ThrottleValue=MaxThrottle
+        MoveAmount=4
+        EGP:egpColor(2,vec(255))
+        EGP:egpColor(3,vec(255/1.75))
+        EGP:egpColor(4,vec(255/1.75))
+        EGP:egpColor(5,vec(255/1.75))
+        EGP:egpColor(6,vec(255/1.75))
+        EGP:egpColor(7,vec(255/1.75))
+        
+    }
+    if(Throttle==3){
+        Level=3
+        ThrottleValue=(MaxThrottle/4)*3
+        MoveAmount=3
+        EGP:egpColor(2,vec(255/1.75))
+        EGP:egpColor(3,vec(255))
+        EGP:egpColor(4,vec(255/1.75))
+        EGP:egpColor(5,vec(255/1.75))
+        EGP:egpColor(6,vec(255/1.75))
+        EGP:egpColor(7,vec(255/1.75))
+    }
+    if(Throttle==2){
+        Level=4
+        ThrottleValue=MaxThrottle/2
+        MoveAmount=2
+        EGP:egpColor(2,vec(255/1.75))
+        EGP:egpColor(3,vec(255/1.75))
+        EGP:egpColor(4,vec(255))
+        EGP:egpColor(5,vec(255/1.75))
+        EGP:egpColor(6,vec(255/1.75))
+        EGP:egpColor(7,vec(255/1.75))
+    }
+    if(Throttle==1){
+        Level=5
+        ThrottleValue=MaxThrottle/4
+        MoveAmount=1
+        EGP:egpColor(2,vec(255/1.75))
+        EGP:egpColor(3,vec(255/1.75))
+        EGP:egpColor(4,vec(255/1.75))
+        EGP:egpColor(5,vec(255))
+        EGP:egpColor(6,vec(255/1.75))
+        EGP:egpColor(7,vec(255/1.75))
+    }
+    if(Throttle==0){
+        Level=6
+        ThrottleValue=0.0
+        MoveAmount=0
+        EGP:egpColor(2,vec(255/1.75))
+        EGP:egpColor(3,vec(255/1.75))
+        EGP:egpColor(4,vec(255/1.75))
+        EGP:egpColor(5,vec(255/1.75))
+        EGP:egpColor(6,vec(255))
+        EGP:egpColor(7,vec(255/1.75))
+    }
+    if(Throttle==-1){
+        Level=7
+        ThrottleValue=MinThrottle
+        MoveAmount=1
+        EGP:egpColor(2,vec(255/1.75))
+        EGP:egpColor(3,vec(255/1.75))
+        EGP:egpColor(4,vec(255/1.75))
+        EGP:egpColor(5,vec(255/1.75))
+        EGP:egpColor(6,vec(255/1.75))
+        EGP:egpColor(7,vec(255))
+    }
+}
+
+if(MoveDistance>Level){
+    MoveDistance=MoveDistance-MoveSpeed
+}
+if(MoveDistance<Level){
+    MoveDistance=MoveDistance+MoveSpeed
+}
+Add=ThrottleValue-Move
+EGP:egpText(9,"<",vec2(TextPositionX+45+ScrW,TextPositionY+(-0.75)+(TextDistance*MoveDistance)+(Add)+ScrH))
+EGP:egpText(10,""+abs(Move)+" kts",vec2(TextPositionX+55+ScrW,TextPositionY+(TextDistance*MoveDistance)+(Add)+ScrH))
+
+if(clk("load")){
+EGP:egpText(1,"   W",vec2(TextPositionX+ScrW,TextPositionY+(TextDistance*1)+ScrH))
+EGP:egpText(2,"FULL",vec2(TextPositionX+ScrW,TextPositionY+(TextDistance*2)+ScrH))
+EGP:egpText(3," 3/4",vec2(TextPositionX+ScrW,TextPositionY+(TextDistance*3)+ScrH))
+EGP:egpText(4," 1/2",vec2(TextPositionX+ScrW,TextPositionY+(TextDistance*4)+ScrH))
+EGP:egpText(5," 1/4",vec2(TextPositionX+ScrW,TextPositionY+(TextDistance*5)+ScrH))
+EGP:egpText(6,"STOP",vec2(TextPositionX+ScrW,TextPositionY+(TextDistance*6)+ScrH))
+EGP:egpText(7,"FULL",vec2(TextPositionX+ScrW,TextPositionY+(TextDistance*7)+ScrH))
+EGP:egpText(8,"   S",vec2(TextPositionX+ScrW,TextPositionY+(TextDistance*8)+ScrH))
+
+EGP:egpColor(1,vec(255/1.75))
+EGP:egpColor(8,vec(255/1.75))
+EGP:egpColor(9,vec(255/1.75))
+EGP:egpColor(10,vec(255))
+}
+if(dupefinished()){
+    reset()
+}
