@@ -1,5 +1,5 @@
 @name WoWS HUD
-@inputs W S EGP:wirelink Seat:entity Move
+@inputs W S EGP:wirelink Seat:entity Move Parent:entity
 @outputs MaxThrottle MinThrottle ThrottleValue Add MoveAmount
 @persist Throttle Text:string ScrW ScrH Level TextDistance TextPositionX TextPositionY MaxThrottle MinThrottle ThrottleValue MoveDistance MoveSpeed MoveAmount
 interval(100)
@@ -13,7 +13,7 @@ if(first()){
     TextPositionY=300
     
     MaxThrottle=3.8*4
-    MinThrottle=-MaxThrottle/2
+    MinThrottle=-MaxThrottle/4
     
     MoveSpeed=0.05
     
@@ -32,7 +32,7 @@ if(changed(S)&S){
 if(clk("up")){
     if(Throttle<4){
         Throttle=Throttle+1
-        Seat:soundPlay("clk",0,"common/wpn_moveselect.wav")
+        Parent:soundPlay("clk",0,"common/wpn_moveselect.wav")
     }
     if(W){
         timer("up",1000/3.5)
@@ -41,7 +41,7 @@ if(clk("up")){
 if(clk("down")){
     if(Throttle>-1){
         Throttle=Throttle-1
-        Seat:soundPlay("clk",0,"common/wpn_moveselect.wav")
+        Parent:soundPlay("clk",0,"common/wpn_moveselect.wav")
     }
     if(S){
         timer("down",1000/3.5)
@@ -127,9 +127,9 @@ if(MoveDistance>Level){
 if(MoveDistance<Level){
     MoveDistance=MoveDistance+MoveSpeed
 }
-Add=ThrottleValue-Move
-EGP:egpText(9,"<",vec2(TextPositionX+45+ScrW,TextPositionY+(-0.75)+(TextDistance*MoveDistance)+(Add)+ScrH))
-EGP:egpText(10,""+abs(Move)+" kts",vec2(TextPositionX+55+ScrW,TextPositionY+(TextDistance*MoveDistance)+(Add)+ScrH))
+Add=-Move*6
+EGP:egpText(9,"<",vec2(TextPositionX+45+ScrW,TextPositionY+(-0.75)+(TextDistance*6)+(Add)+ScrH))
+EGP:egpText(10,""+abs(Move)+" kts",vec2(TextPositionX+55+ScrW,TextPositionY+(TextDistance*6)+(Add)+ScrH))
 
 if(clk("load")){
 EGP:egpText(1,"   W",vec2(TextPositionX+ScrW,TextPositionY+(TextDistance*1)+ScrH))
