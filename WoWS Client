@@ -1,0 +1,63 @@
+@name WoWS Client
+@inputs W A S D Base:entity Seat:entity MaxThrottle MinThrottle ThrottleValue
+@outputs CamPos:vector CamParent:entity CamDistance Speed TurnSpeed TurnSpeedFinal OffsetForce
+@persist CamPos:vector CamParent:entity CamDistance Move TurnSpeed TurnSpeedFinal OffsetForce
+@trigger none
+interval(100)
+
+if(first()){
+    holoCreate(1)
+    holoScale(1,vec(0.5))
+    holoPos(1, Base:toWorld(vec(0,0,3)))
+    holoAng(1, Base:toWorld(ang(0,0,0)))
+    CamPos=vec(0,0,5)
+    CamParent=holoEntity(1)
+    CamDistance=35
+    Move=0
+}
+if(Move<ThrottleValue){
+    Move=Move+0.1
+}
+if(Move>ThrottleValue){
+    Move=Move-0.1
+}
+OffsetForce=(TurnSpeed*0.2)*(Move*0.03)+OffsetForce*0.5
+holoPos(1,holoEntity(1):toWorld(vec(Move*0.07,-OffsetForce,0)))
+
+if(Move<0.1){
+    if(Move>-0.1){
+        Speed=0
+    }else{
+        Speed=Move
+    }
+}else{
+    Speed=Move
+}
+if(A){
+    if(TurnSpeed<1){
+        TurnSpeed=TurnSpeed+(0.05*(abs(Move)*0.1))
+    }
+}
+if(D){
+    if(TurnSpeed>-1){
+        TurnSpeed=TurnSpeed-(0.05*(abs(Move)*0.1))
+    }
+}
+if(!A&!D){
+    if(TurnSpeed>0){
+        TurnSpeed=TurnSpeed-0.015
+    }
+    if(TurnSpeed<0){
+        TurnSpeed=TurnSpeed+0.015
+    }
+}
+if(TurnSpeed<0.1){
+    if(TurnSpeed>-0.1){
+        TurnSpeedFinal=0*0.7
+    }else{
+        TurnSpeedFinal=TurnSpeed*0.7
+    }
+}else{
+    TurnSpeedFinal=TurnSpeed*0.7
+}
+holoAng(1,holoEntity(1):toWorld(ang(0,(TurnSpeedFinal)*abs(OffsetForce*6),0)))
