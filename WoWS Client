@@ -1,22 +1,33 @@
 @name WoWS Client
 @inputs W A S D Base:entity Seat:entity MaxThrottle MinThrottle ThrottleValue
 @outputs CamPos:vector CamParent:entity CamDistance Speed TurnSpeed TurnSpeedFinal OffsetForce HitFront HitBack OverrideFront OverrideBack
-@persist CamPos:vector CamParent:entity CamDistance Move TurnSpeed TurnSpeedFinal OffsetForce OverrideFront OverrideBack
+@persist CamPos:vector CamParent:entity CamDistance Move TurnSpeed TurnSpeedFinal OffsetForce OverrideFront OverrideBack Size
 @trigger none
 interval(100)
-
 if(first()){
+    
+    Size=0.5
+    
     holoCreate(1)
-    holoScale(1,vec(0.5))
-    holoPos(1, Base:toWorld(vec(0,0,3)))
-    holoAng(1, Base:toWorld(ang(0,0,0)))
-    CamPos=vec(0,0,5)
+    holoScale(1,vec(0.25))
+    holoPos(1, Base:toWorld(vec(175,0,3)))
+    holoAng(1, Base:toWorld(ang(0,180,0)))
+    
+    holoCreate(2)
+    holoPos(2, holoEntity(1):toWorld(vec(0,0,18)*Size))
+    holoAng(2, holoEntity(1):toWorld(ang(0,-90,0)))
+    holoModel(2, "models/props_wasteland/boat_fishing01a.mdl")
+    holoScale(2, vec(0.06)*Size)
+    
+    holoParent(2, 1)
+    
+    CamPos=vec(0,0,15)*Size
     CamParent=holoEntity(1)
-    CamDistance=35
+    CamDistance=80*Size
     Move=0
 }
-HitRangerFront=rangerOffset(15,holoEntity(1):toWorld(vec(0,0,0)),holoEntity(1):forward())
-HitRangerBack=rangerOffset(15,holoEntity(1):toWorld(vec(0,0,0)),-holoEntity(1):forward())
+HitRangerFront=rangerOffset(30*Size,holoEntity(1):toWorld(vec(0,0,0)),holoEntity(1):forward())
+HitRangerBack=rangerOffset(30*Size,holoEntity(1):toWorld(vec(0,0,0)),-holoEntity(1):forward())
 
 HitFront=HitRangerFront:hit()
 HitBack=HitRangerBack:hit()
@@ -46,7 +57,7 @@ if(Move>ThrottleValue){
     Move=Move-0.1
 }
 OffsetForce=(TurnSpeed*0.2)*(Move*0.03)+OffsetForce*0.5
-holoPos(1,holoEntity(1):toWorld(vec(((Move*0.07)*(OverrideFront&OverrideBack)),-OffsetForce*(OverrideFront&OverrideBack),0)))
+holoPos(1,holoEntity(1):toWorld(vec(((Move*0.07)*(OverrideFront&OverrideBack)),-OffsetForce*(OverrideFront&OverrideBack),0)*Size))
 
 if(Move<0.1){
     if(Move>-0.1){
