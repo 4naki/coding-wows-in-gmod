@@ -1,7 +1,7 @@
 @name WoWS Client
 @inputs W A S D Base:entity Seat:entity MaxThrottle MinThrottle ThrottleValue
-@outputs CamPos:vector CamParent:entity CamDistance Speed TurnSpeed TurnSpeedFinal OffsetForce
-@persist CamPos:vector CamParent:entity CamDistance Move TurnSpeed TurnSpeedFinal OffsetForce
+@outputs CamPos:vector CamParent:entity CamDistance Speed TurnSpeed TurnSpeedFinal OffsetForce HitFront HitBack OverrideFront OverrideBack
+@persist CamPos:vector CamParent:entity CamDistance Move TurnSpeed TurnSpeedFinal OffsetForce OverrideFront OverrideBack
 @trigger none
 interval(100)
 
@@ -15,6 +15,30 @@ if(first()){
     CamDistance=35
     Move=0
 }
+HitRangerFront=rangerOffset(15,holoEntity(1):toWorld(vec(0,0,0)),holoEntity(1):forward())
+HitRangerBack=rangerOffset(15,holoEntity(1):toWorld(vec(0,0,0)),-holoEntity(1):forward())
+
+HitFront=HitRangerFront:hit()
+HitBack=HitRangerBack:hit()
+
+if(HitFront){
+    if(Move<0.1){
+        OverrideFront=1
+    }else{
+        OverrideFront=0
+    }
+}else{
+    OverrideFront=1
+}
+if(HitBack){
+    if(Move>-0.1){
+        OverrideBack=1
+    }else{
+        OverrideBack=0
+    }
+}else{
+    OverrideBack=1
+}
 if(Move<ThrottleValue){
     Move=Move+0.1
 }
@@ -22,7 +46,7 @@ if(Move>ThrottleValue){
     Move=Move-0.1
 }
 OffsetForce=(TurnSpeed*0.2)*(Move*0.03)+OffsetForce*0.5
-holoPos(1,holoEntity(1):toWorld(vec(Move*0.07,-OffsetForce,0)))
+holoPos(1,holoEntity(1):toWorld(vec(((Move*0.07)*(OverrideFront&OverrideBack)),-OffsetForce*(OverrideFront&OverrideBack),0)))
 
 if(Move<0.1){
     if(Move>-0.1){
