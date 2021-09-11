@@ -12,15 +12,6 @@ if(first()){
     holoScale(1,vec(0.25))
     holoPos(1, Base:toWorld(vec(175,0,3)))
     holoAng(1, Base:toWorld(ang(0,180,0)))
-    
-    holoCreate(2)
-    holoPos(2, holoEntity(1):toWorld(vec(0,0,18)*Size))
-    holoAng(2, holoEntity(1):toWorld(ang(0,-90,0)))
-    holoModel(2, "models/props_wasteland/boat_fishing01a.mdl")
-    holoScale(2, vec(0.06)*Size)
-    
-    holoParent(2, 1)
-    
     CamPos=vec(0,0,15)*Size
     CamParent=holoEntity(1)
     CamDistance=80*Size
@@ -59,8 +50,8 @@ if(Move>ThrottleValue){
 OffsetForce=(TurnSpeed*0.2)*(Move*0.03)+OffsetForce*0.5
 holoPos(1,holoEntity(1):toWorld(vec(((Move*0.07)*(OverrideFront&OverrideBack)),-OffsetForce*(OverrideFront&OverrideBack),0)*Size))
 
-if(Move<0.1){
-    if(Move>-0.1){
+if(Move<0.105){
+    if(Move>-0.105){
         Speed=0
     }else{
         Speed=Move
@@ -96,3 +87,6 @@ if(TurnSpeed<0.1){
     TurnSpeedFinal=TurnSpeed*0.7
 }
 holoAng(1,holoEntity(1):toWorld(ang(0,(TurnSpeedFinal)*abs(OffsetForce*6),0)))
+if(dupefinished()){
+    reset()
+}
