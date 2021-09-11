@@ -1,6 +1,6 @@
 @name WoWS Client
 @inputs W A S D Base:entity Seat:entity MaxThrottle MinThrottle ThrottleValue
-@outputs CamPos:vector CamParent:entity CamDistance Speed TurnSpeed TurnSpeedFinal OffsetForce HitFront HitBack OverrideFront OverrideBack
+@outputs CamPos:vector CamParent:entity CamDistance Speed TurnSpeed TurnSpeedFinal OffsetForce HitFront HitBack OverrideFront OverrideBack Parent:entity
 @persist CamPos:vector CamParent:entity CamDistance Move TurnSpeed TurnSpeedFinal OffsetForce OverrideFront OverrideBack Size
 @trigger none
 interval(100)
@@ -87,6 +87,4 @@ if(TurnSpeed<0.1){
     TurnSpeedFinal=TurnSpeed*0.7
 }
 holoAng(1,holoEntity(1):toWorld(ang(0,(TurnSpeedFinal)*abs(OffsetForce*6),0)))
-if(dupefinished()){
-    reset()
-}
+
