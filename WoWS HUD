@@ -128,8 +128,8 @@ if(MoveDistance<Level){
     MoveDistance=MoveDistance+MoveSpeed
 }
 Add=ThrottleValue-Move
-EGP:egpText(9,"<",vec2(TextPositionX+45+ScrW,TextPositionY+(-0.75)+(TextDistance*MoveDistance)+(Add)+ScrH))
-EGP:egpText(10,""+abs(Move)+" kts",vec2(TextPositionX+55+ScrW,TextPositionY+(TextDistance*MoveDistance)+(Add)+ScrH))
+EGP:egpText(9,"<",vec2(TextPositionX+45+ScrW,TextPositionY+(-0.75)+(TextDistance*MoveDistance)+(Add*0.2)+ScrH))
+EGP:egpText(10,""+abs(Move)+" kts",vec2(TextPositionX+55+ScrW,TextPositionY+(TextDistance*MoveDistance)+(Add*0.2)+ScrH))
 
 if(clk("load")){
 EGP:egpText(1,"   W",vec2(TextPositionX+ScrW,TextPositionY+(TextDistance*1)+ScrH))
