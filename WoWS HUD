@@ -15,7 +15,7 @@ if(first()){
     MaxThrottle=3.8*4
     MinThrottle=-MaxThrottle/2
     
-    MoveSpeed=0.05
+    MoveSpeed=0.02
     
     Level=6
     MoveDistance=6
